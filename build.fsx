@@ -12,6 +12,18 @@ open Fake.Core
 open Fake.DotNet
 open Fake.IO
 
+open System
+open System.IO
+open Fake
+open Fake.Tools.Git
+open Fake.DotNet
+open Fake.IO
+open Fake.IO.FileSystemOperators
+open Fake.IO.Globbing.Operators
+open Fake.Core.TargetOperators
+open Fake.Tools
+open Fake.Core
+
 let project = "TypeSpec"
 let summary = "Versionable Type Contracts"
 let gitOwner = "musheddev"
@@ -58,7 +70,7 @@ module Util =
 
 Target.create "AssemblyInfo" (fun _ ->
     !! "src/**/*.??proj"
-    |> Seq.map getProjectDetails
+    |> Seq.map Util.getProjectDetails
     |> Seq.iter (fun (projFileName, _, folderName, attributes) ->
             match projFileName with
             | Fsproj -> AssemblyInfoFile.createFSharp (folderName </> "AssemblyInfo.fs") attributes
