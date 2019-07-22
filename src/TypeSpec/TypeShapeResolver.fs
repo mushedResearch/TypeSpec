@@ -12,7 +12,7 @@ open Microsoft.FSharp.Reflection
 open TypeShape.Core
 open TypeShape.Core.Core
 
-open TypeSystem.Types
+open TypeSpec.Types
 
     //| Constant of Type * Instance
     //| Reference of Named * ReferenceSpec

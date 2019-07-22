@@ -1,18 +1,14 @@
+source https://api.nuget.org/v3/index.json
+framework: netcoreapp2.2
 
-group TypeSpec
-    source https://api.nuget.org/v3/index.json
-    framework: netcoreapp2.2
-    storage: none
-
-    nuget FSharp.Core
-    nuget System.Memory
-    nuget System.IO.Pipelines
-    nuget TypeShape
+nuget FSharp.Core
+nuget System.Memory
+nuget System.IO.Pipelines
+nuget TypeShape
 
 group Build
     source https://api.nuget.org/v3/index.json
     framework: netstandard2.0
-    storage: none
 
     nuget FSharp.Core
     nuget Fake.Core.Target

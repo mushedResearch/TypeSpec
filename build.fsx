@@ -163,9 +163,6 @@ open Fake.Core.TargetOperators
 "Build"
     ==> "RunTests"
 
-"Build"
-    ==>
-    "Release"    
 
 
 Target.runOrDefault "Build"

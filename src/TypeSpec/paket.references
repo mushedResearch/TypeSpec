@@ -1,6 +1,5 @@
-group TypeSpec
-    FSharp.Core
-    System.Memory
-    System.IO.Pipelines
-    TypeShape
+FSharp.Core
+System.Memory
+System.IO.Pipelines
+TypeShape
 
