@@ -88,7 +88,7 @@ Target.create "CopyBinaries" (fun _ ->
 )
 
 Target.create "Clean" (fun _ ->
-    Shell.cleanDirs ["bin"; "temp"]
+    Shell.cleanDirs ["bin"]
 )
 
 Target.create "CleanDocs" (fun _ ->
