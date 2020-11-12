@@ -128,39 +128,95 @@ module Types =
       
         
  
-    
-
-  //and
-  and SubEvent<'t,'spec> =
-    | Create of 't 
-    | AddMember of string * 't
-    | Depricate
-    | AddSpec of 'spec
-
-  and Event<'t,'spec> =
+  and TransactionSig = 
     { Instant : DateTime
-      Event : SubEvent<'t,'spec>
-      Authority : string}
+      Id : uint64
+      Authority : string }
+
+  and CreateTypeTransaction =
+    { Transaction : TransactionSig }
+
+  and CreateOfTypeTransaction = 
+    { OfType : TypeRaw 
+      Transaction : TransactionSig }
+    
+  and DepricateTypeTransaction =
+    { Transaction : TransactionSig }  
+
+  and AddMemberTypeTransaction =
+    { Name : string
+      OfType : TypeRaw
+      Transaction : TransactionSig } 
+
+  and RenameMemberTypeTransaction =
+    { NewName : string
+      OldName : string
+      Transaction : TransactionSig }
+
+  and SpecTransaction<'spec> =     
+    { Spec : 'spec
+      Transaction : TransactionSig }       
+
+  and SimpleTypeEvent<'spec> = 
+     | Create of CreateTypeTransaction
+     | Depricate of DepricateTypeTransaction
+     | Spec of SpecTransaction<'spec>
+
+  and SimpleTypeEvent = 
+     | Create of CreateTypeTransaction
+     | Depricate of DepricateTypeTransaction
+
+  and AbstractTypeEvent<'t,'spec> = 
+     | Create of CreateTypeTransaction
+     | Depricate of DepricateTypeTransaction
+     | Spec of SpecTransaction<'spec>
+
+  and NamedTypeEvent =
+     | Create of CreateTypeTransaction * string
+     | Depricate of DepricateTypeTransaction
+     | Spec of SpecTransaction<'spec>
+
+  and ConstantTypeEvent =
+     | Create
+     | UpdateConstant
+     | Depricate
+
+  and ReferenceTypeEvent =
+     | Create
+     | UpdateReference 
+     | Depricate
+     | Spec of SpecTransaction<ReferenceSpec>     
+  // and Action<'t,'spec> =
+  //   | Create of 't
+  //   | AddMember of string * 't
+  //   | Depricate
+  //   | AddSpec of 'spec
+
+  // and Event<'t,'spec> =
+  //   { Instant : DateTime
+  //     Id : uint64
+  //     Event : Action<'t,'spec>
+  //     Authority : string}
 
   and TypeRaw =
-    | String of Event<unit,StringSpec> []
-    | Int of Event<unit,RangeSpec<int>> []
-    | Byte of Event<unit,RangeSpec<uint8>> []
-    | Int64 of Event<unit,RangeSpec<int64>> []
-    | UInt64 of Event<unit,RangeSpec<uint64>> []
-    | Double of Event<unit,RangeSpec<float>> []
-    | Decimal of Event<unit,RangeSpec<decimal>> []
-    | Guid of Event<unit,unit>
-    | Bool of Event<unit,unit>
-    | UTCDateTime of Event<unit,DateTimeSpec> []
+    | String of SimpleTypeEvent<StringSpec> []
+    | Int of SimpleTypeEvent<RangeSpec<int>> []
+    | Byte of SimpleTypeEvent<RangeSpec<uint8>> []
+    | Int64 of SimpleTypeEvent<RangeSpec<int64>> []
+    | UInt64 of SimpleTypeEvent<RangeSpec<uint64>> []
+    | Double of SimpleTypeEvent<RangeSpec<float>> []
+    | Decimal of SimpleTypeEvent<RangeSpec<decimal>> []
+    | Guid of SimpleTypeEvent []
+    | Bool of SimpleTypeEvent []
+    | UTCDateTime of SimpleTypeEvent<DateTimeSpec> []
     | Unit
-    | Binary of Event<unit,ArraySpec<byte>> []
-    | Array of Event<TypeRaw,ArraySpec<Instance>> []
-    | Constant of Event<TypeRaw * Instance,unit> []
-    | Product of Event<TypeRaw,ProductSpec> []
-    | Sum of Event<TypeRaw,SumSpec> []
-    | Reference of Event<Named, ReferenceSpec> []
-    | Named of Event<Named * TypeRaw,unit> []
+    | Binary of SimpleTypeEvent<ArraySpec<byte>> []
+    | Array of AbstractTypeEvent<TypeRaw,ArraySpec<Instance>> []
+    | Constant of ConstantTypeEvent []
+    | Product of AbstractTypeEvent<TypeRaw,ProductSpec> []
+    | Sum of AbstractTypeEvent<TypeRaw,SumSpec> []
+    | Reference of ReferenceTypeEvent []
+    | Named of NamedTypeEvent []
 
   and Type =
     | String of StringSpec

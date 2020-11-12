@@ -10,7 +10,6 @@ open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Reflection
 
 open TypeShape.Core
-open TypeShape.Core.Core
 
 open TypeSpec.Types
 
