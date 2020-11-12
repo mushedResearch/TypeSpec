@@ -104,3 +104,19 @@ let (|Record|_|) (t : Type, s : TypeShape) =
         | _ -> None
     | _ -> None
 
+let Valdate<'t> (t : Type) (obj : 't) : bool =
+      match t, TypeShape<'t>() with
+      | Record(spec, RecordShapeGroup.FSharpRecord(irec)) -> true
+      | Record(spec, RecordShapeGroup.CliMutable(irec)) -> irec.Accept {
+        new ICliMutableVisitor<bool> with
+          member __.Visit (shape : ShapeCliMutable<'a>) =
+            shape.Properties 
+            |> Seq.map (fun x -> 
+              x.Accept {
+                new IReadOnlyMemberVisitor<'a,bool> with
+                  member __.Visit (mbr : ReadOnlyMember<'a,'b>) =
+                    true //mbr.Get obj
+              } )
+            |> Seq.reduce (&&)
+      }
+      
